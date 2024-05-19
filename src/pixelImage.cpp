@@ -16,7 +16,7 @@ engix::PixelImage::PixelImage(const SmartSDLSurface& surface) noexcept : width(s
     auto numberOfPixels = width * height;
     pixels.resize(numberOfPixels);
 
-    auto data = static_cast<uint8_t*>(surface->pixels);
+    auto data = static_cast<uint32_t*>(surface->pixels);
     for (size_t i = 0; i < numberOfPixels; i++)
     {
         uint8_t red, green, blue, alpha;
@@ -27,7 +27,7 @@ engix::PixelImage::PixelImage(const SmartSDLSurface& surface) noexcept : width(s
 
 SmartSDLSurface engix::PixelImage::createSDLSurface() const
 {
-    auto surface = makeSmartSurface(SDL_CreateRGBSurfaceWithFormat(0, width, height, 32, SDL_PIXELFORMAT_RGBA8888));
+    auto surface = makeSmartSurface(SDL_CreateRGBSurfaceWithFormat(0, static_cast<int>(width), static_cast<int>(height), 32, SDL_PIXELFORMAT_RGBA32));
     if (surface == nullptr)
     {
         std::string msg("Unable to create surface! SDL_Error: ");
@@ -42,10 +42,29 @@ SmartSDLSurface engix::PixelImage::createSDLSurface() const
     
     auto dataPixels = static_cast<uint32_t*>(surface->pixels);
 
-    auto numberOfPixels = pixels.size();
-    for (size_t i = 0; i < numberOfPixels; ++i) 
+    // auto numberOfPixels = pixels.size();
+    // for (size_t i = 0; i < numberOfPixels; ++i) 
+    // {
+    //     dataPixels[i] = SDL_MapRGBA(surface->format, pixels[i].red, pixels[i].green, pixels[i].blue, pixels[i].alpha);
+    // }
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            auto index = y * width + x;
+
+            Uint8 r = (Uint8)pixels[index].red;
+            Uint8 g = (Uint8)pixels[index].green;
+            Uint8 b = (Uint8)pixels[index].blue;
+            Uint8 a = pixels[index].alpha;  // Fully opaque
+
+            Uint32 pixel = SDL_MapRGBA(surface->format, r, g, b, a);
+
+            dataPixels[index] = pixel;
+        }
+    }
+
+    if (SDL_MUSTLOCK(surface))
     {
-        dataPixels[i] = SDL_MapRGBA(surface->format, pixels[i].red, pixels[i].green, pixels[i].blue, pixels[i].alpha);
+        SDL_UnlockSurface(surface.get());
     }
     return surface;
 }
