@@ -1,0 +1,13 @@
+{
+    "format": 8,
+    "cell_width": 7,
+    "cell_height": 9,
+    "height": 7,
+    "chars":
+    [
+        {
+            "char": 32,
+            "width": 2
+        }
+    ]
+}

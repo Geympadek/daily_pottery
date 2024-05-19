@@ -1,0 +1,27 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+        {
+			"label": "Build with MSBuild",
+            "type": "shell",
+            "command": "msbuild",
+            "args": [
+                "${workspaceFolder}\\build\\daily_pottery.vcxproj",
+                "/t:Build",
+                "/p:Configuration=Debug"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": "$msCompile"
+		}
+	]
+}
