@@ -41,25 +41,10 @@ SmartSDLSurface engix::PixelImage::createSDLSurface() const
     }
     
     auto dataPixels = static_cast<uint32_t*>(surface->pixels);
-
-    // auto numberOfPixels = pixels.size();
-    // for (size_t i = 0; i < numberOfPixels; ++i) 
-    // {
-    //     dataPixels[i] = SDL_MapRGBA(surface->format, pixels[i].red, pixels[i].green, pixels[i].blue, pixels[i].alpha);
-    // }
-    for (int y = 0; y < height; ++y) {
-        for (int x = 0; x < width; ++x) {
-            auto index = y * width + x;
-
-            Uint8 r = (Uint8)pixels[index].red;
-            Uint8 g = (Uint8)pixels[index].green;
-            Uint8 b = (Uint8)pixels[index].blue;
-            Uint8 a = pixels[index].alpha;  // Fully opaque
-
-            Uint32 pixel = SDL_MapRGBA(surface->format, r, g, b, a);
-
-            dataPixels[index] = pixel;
-        }
+    auto numberOfPixels = pixels.size();
+    for (size_t i = 0; i < numberOfPixels; ++i) 
+    {
+        dataPixels[i] = SDL_MapRGBA(surface->format, pixels[i].red, pixels[i].green, pixels[i].blue, pixels[i].alpha);
     }
 
     if (SDL_MUSTLOCK(surface))
