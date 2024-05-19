@@ -42,8 +42,8 @@ namespace engix
 
         SmartSDLSurface createSDLSurface() const;
 
-        Color& get(size_t x, size_t y) noexcept {return pixels[x + y * height];}
-        const Color& get(size_t x, size_t y) const noexcept {return pixels[x + y * height];}
+        Color& get(size_t x, size_t y) noexcept {return pixels[x + y * width];}
+        const Color& get(size_t x, size_t y) const noexcept {return pixels[x + y * width];}
 
         PixelImage getPart(Rect clip) const noexcept;
         static PixelImage getPart(const PixelImage& origin, Rect clip) noexcept {return origin.getPart(clip);}

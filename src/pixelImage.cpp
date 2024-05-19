@@ -90,8 +90,8 @@ void PixelImage::draw(const PixelImage &src, Vector2s position) noexcept
     {
         for (size_t x = 0; x < src.width; x++)
         {
-            size_t calcX = position.x + x;
-            size_t calcY = position.y + y;
+            auto calcX = position.x + x;
+            auto calcY = position.y + y;
 
             if (calcX < width && calcY < height)
             {
