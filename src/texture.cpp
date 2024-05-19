@@ -98,11 +98,76 @@ Texture engix::Texture::load(size_t width, size_t height,
     pixelImage.draw(ldCorner, Vector2i{0, rightDown.y});
     pixelImage.draw(rdCorner, rightDown);
 
-    for (size_t y = 0; y < rightDown.y; y++)
+    //Left
+    for (size_t y = leftUp.y; y < rightDown.y; y+=left.height)
     {
-        
+        Vector2i pos = {0, y};
+        auto diff = rightDown.y - y;
+        if (diff < left.height)
+        {
+            pixelImage.draw(left.getPart(Rect{Vector2i{}, left.width, left.height - diff}), pos);
+        }
+        else
+        {
+            pixelImage.draw(left, pos);
+        }
+    }
+    //Right
+    for (size_t y = leftUp.y; y < rightDown.y; y+=right.height)
+    {
+        Vector2i pos = {rightDown.x, y};
+        auto diff = rightDown.y - y;
+        if (diff < right.height)
+        {
+            pixelImage.draw(right.getPart(Rect{Vector2i{}, right.width, right.height - diff}), pos);
+        }
+        else
+        {
+            pixelImage.draw(right, pos);
+        }
+    }
+    //Up
+    for (size_t x = leftUp.x; x < rightDown.x; x+=up.width)
+    {
+        Vector2i pos = {x, 0};
+        auto diff = rightDown.x - x;
+        if (diff < up.width)
+        {
+            pixelImage.draw(up.getPart(Rect{Vector2i{}, up.width, up.height - diff}), pos);
+        }
+        else
+        {
+            pixelImage.draw(up, pos);
+        }
+    }
+    //Down
+    for (size_t x = leftUp.x; x < rightDown.x; x+=down.width)
+    {
+        Vector2i pos = {x, rightDown.y};
+        auto diff = rightDown.x - x;
+        if (diff < down.width)
+        {
+            pixelImage.draw(down.getPart(Rect{Vector2i{}, down.width, down.height - diff}), pos);
+        }
+        else
+        {
+            pixelImage.draw(down, pos);
+        }
     }
 
+    auto areaWidth = rightDown.x - leftUp.x;
+    auto areaHeight = rightDown.y - leftUp.y;
+    //Inside area
+    for (size_t y = leftUp.y; y < rightDown.y; y += fill.height)
+    {
+        for (size_t x = leftUp.x; x < rightDown.x; x += fill.width)
+        {
+            Rect clip{{0, 0}, std::min(rightDown.x - x, fill.width), std::min(rightDown.y - y, fill.height)};
+
+            pixelImage.draw(fill.getPart(clip), {x, y});
+        }
+    }
+    
     return load(pixelImage);
 }
 
