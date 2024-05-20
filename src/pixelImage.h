@@ -47,6 +47,7 @@ namespace engix
 
         PixelImage getPart(Rect clip) const noexcept;
         static PixelImage getPart(const PixelImage& origin, Rect clip) noexcept {return origin.getPart(clip);}
-        void draw(const PixelImage& src, Vector2s position = {}) noexcept;
+        void draw(const PixelImage& src, Vector2s position) noexcept;
+        void draw(const PixelImage& src, Rect area) noexcept;
     };
 }

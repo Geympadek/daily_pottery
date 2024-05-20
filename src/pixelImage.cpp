@@ -85,3 +85,17 @@ void PixelImage::draw(const PixelImage &src, Vector2s position) noexcept
         }
     }
 }
+
+void engix::PixelImage::draw(const PixelImage &src, Rect area) noexcept
+{
+    auto end = Vector2i{area.start.x + area.width, area.start.y + area.height};
+    for (size_t y = area.start.y; y < end.y; y += src.width)
+    {
+        for (size_t x = area.start.x; x < end.x; x += src.height)
+        {
+            Rect clip(std::min(end.x - x, src.width), std::min(end.y - y, src.height));
+
+            draw(src.getPart(clip), Vector2s{x, y});
+        }
+    }
+}

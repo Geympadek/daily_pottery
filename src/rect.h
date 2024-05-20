@@ -13,8 +13,13 @@ namespace engix
 
         constexpr Rect(int x, int y, size_t width, size_t height) noexcept:
             start(x, y), width(width), height(height) {}
-        constexpr Rect(Vector2i start = {0, 0}, size_t width = 0u, size_t height = 0u) noexcept :
+        constexpr Rect(Vector2i start, size_t width, size_t height) noexcept :
             start(start), width(width), height(height) {}
+        constexpr Rect(size_t width, size_t height) noexcept :
+            start(), width(width), height(height) {}
+        constexpr Rect() noexcept :
+            start(), width(0), height(0) {}
+        
         constexpr operator SDL_Rect() const noexcept {return {start.x, start.y, static_cast<int>(width), static_cast<int>(height)};}
 
         operator json::Value() const noexcept {return toJson();}
