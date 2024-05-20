@@ -93,9 +93,17 @@ void engix::PixelImage::draw(const PixelImage &src, Rect area) noexcept
     {
         for (size_t x = area.start.x; x < end.x; x += src.width)
         {
-            Rect clip(std::min(end.x - x, src.width), std::min(end.y - y, src.height));
-
-            draw(src.getPart(clip), Vector2s{x, y});
+            Vector2s pos(x, y);
+            auto delta = end - pos;
+            if (delta.x < src.width || delta.y < src.height)
+            {
+                Rect clip(delta.x, delta.y);
+                draw(src.getPart(clip), pos);
+            }
+            else
+            {
+                draw(src, pos);
+            }
         }
     }
 }
