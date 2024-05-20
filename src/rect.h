@@ -32,5 +32,14 @@ namespace engix
             json["height"] = height;
             return json;
         }
+
+        static Rect fromJson(const json::Value& json) noexcept
+        {
+            Rect result;
+            result.start = Vector2i::fromJson(json["start"]);
+            result.width = json.get("width", 0).as<size_t>();
+            result.height = json.get("height", 0).as<size_t>();
+            return result;
+        }
     };
 }

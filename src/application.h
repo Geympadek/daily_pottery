@@ -12,6 +12,7 @@
 #include "font.h"
 #include "timer.h"
 #include "button.h"
+#include "boxTemplate.h"
 
 namespace engix
 {
@@ -90,5 +91,7 @@ namespace engix
         unordered_map<string, shared_ptr<Texture>> textures;
 
         Font pixixFont;
+
+        BoxTemplate hoverBox;
     };
 }
