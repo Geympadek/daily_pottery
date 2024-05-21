@@ -4,17 +4,17 @@ using namespace engix;
 
 PixelImage::PixelImage(size_t width, size_t height) noexcept : width(width), height(height)
 {
-    pixels.resize(width * height, Color::TRANSPARENT);
+    resize(width, height);
 }
 
 PixelImage::PixelImage(Pixels pixels, size_t width, size_t height) noexcept : pixels(std::move(pixels)), width(width), height(height)
 {
 }
 
-engix::PixelImage::PixelImage(const SmartSDLSurface& surface) noexcept : width(surface->w), height(surface->h)
+engix::PixelImage::PixelImage(const SmartSDLSurface& surface) noexcept
 {
+    resize(surface->w, surface->h);
     auto numberOfPixels = width * height;
-    pixels.resize(numberOfPixels);
 
     auto data = static_cast<uint32_t*>(surface->pixels);
     for (size_t i = 0; i < numberOfPixels; i++)
@@ -23,6 +23,13 @@ engix::PixelImage::PixelImage(const SmartSDLSurface& surface) noexcept : width(s
         SDL_GetRGBA(data[i], surface->format, &red, &green, &blue, &alpha);
         pixels[i] = Color(red, green, blue, alpha);
     }
+}
+
+void engix::PixelImage::resize(size_t width, size_t height) noexcept
+{
+    this->width = width; 
+    this->height = height;
+    pixels.resize(width * height, Color::TRANSPARENT);
 }
 
 SmartSDLSurface engix::PixelImage::createSDLSurface() const
@@ -56,16 +63,23 @@ SmartSDLSurface engix::PixelImage::createSDLSurface() const
 
 PixelImage PixelImage::getPart(Rect clip) const noexcept
 {
-    PixelImage result(clip.width, clip.height);
-    
+    PixelImage result;
+    getPart(result, clip);
+    return result;
+}
+
+PixelImage &engix::PixelImage::getPart(PixelImage &dest, Rect clip) const noexcept
+{
+    dest.resize(clip.width, clip.height);
+
     for (size_t i = 0, y = 0; y < clip.height; y++)
     {
         for (size_t x = 0; x < clip.width; x++, i++)
         {
-            result.pixels[i] = get(clip.start.x + x, clip.start.y + y);
+            dest.pixels[i] = get(clip.start.x + x, clip.start.y + y);
         }
     }
-    return result;
+    return dest;
 }
 
 void PixelImage::draw(const PixelImage &src, Vector2s position) noexcept
@@ -79,9 +93,9 @@ void PixelImage::draw(const PixelImage &src, Vector2s position) noexcept
             auto calcY = position.y + y;
 
             if (calcX < width && calcY < height)
-            {
                 this->get(calcX, calcY) = src.get(x, y);
-            }
+            else
+                continue;
         }
     }
 }
@@ -89,6 +103,8 @@ void PixelImage::draw(const PixelImage &src, Vector2s position) noexcept
 void engix::PixelImage::draw(const PixelImage &src, Rect area) noexcept
 {
     auto end = Vector2i{area.start.x + area.width, area.start.y + area.height};
+    
+    PixelImage buffer;
     for (size_t y = area.start.y; y < end.y; y += src.height)
     {
         for (size_t x = area.start.x; x < end.x; x += src.width)
@@ -98,7 +114,7 @@ void engix::PixelImage::draw(const PixelImage &src, Rect area) noexcept
             if (delta.x < src.width || delta.y < src.height)
             {
                 Rect clip(delta.x, delta.y);
-                draw(src.getPart(clip), pos);
+                draw(src.getPart(buffer, clip), pos);
             }
             else
             {
