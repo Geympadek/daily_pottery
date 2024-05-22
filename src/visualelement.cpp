@@ -34,6 +34,7 @@ engix::VisualElement::VisualElement(std::shared_ptr<Texture> texture,
 
 void engix::VisualElement::update(const Mouse &mouse)
 {
+    bool leftClick = mouse.state() & Mouse::State::LEFT;
     if (Vector2i::isAbove(_position, _width, _height, mouse.position()))
     {
         if (!_isAbove)
@@ -41,15 +42,10 @@ void engix::VisualElement::update(const Mouse &mouse)
             _onHoverStart(this, mouse);
             _isAbove = true;
         }
-        bool leftClick = mouse.state() & Mouse::State::LEFT;
         if (!_isFocused)
         {
             _isFocused = leftClick && Vector2i::isAbove(_position, _width, _height, mouse.position());
             _onClick(this, mouse);
-        }
-        else if (!leftClick)
-        {
-            _isFocused = false;
         }
     }
     else
@@ -59,6 +55,10 @@ void engix::VisualElement::update(const Mouse &mouse)
             _onHoverEnd(this, mouse);
             _isAbove = false;
         }
+    }
+    if (!leftClick)
+    {
+        _isFocused = false;
     }
 }
 

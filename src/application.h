@@ -92,6 +92,6 @@ namespace engix
 
         Font pixixFont;
 
-        BoxTemplate hoverBox;
+        BoxTemplate backgroundTemplate;
     };
 }
