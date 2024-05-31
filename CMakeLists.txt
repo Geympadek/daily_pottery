@@ -10,7 +10,7 @@ file(GLOB daily_pottery_SRC CONFIGURE_DEPENDS "src/*.h" "src/*.cpp")
 link_directories("libraries/lib")
 include_directories("libraries/include")
 
-add_executable(daily_pottery ${daily_pottery_SRC})
+add_executable(daily_pottery ${daily_pottery_SRC} icon.o)
 target_link_options(daily_pottery PRIVATE ${SUBSYSTEM_LINKER_OPTIONS})
 
 target_link_libraries(daily_pottery SDL2main)

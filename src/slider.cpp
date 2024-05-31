@@ -1,3 +1,4 @@
+#include "slider.h"
 // #include "slider.h"
 
 // engix::Slider::Slider() : VisualElement(), _point(), _value(0)
@@ -13,7 +14,7 @@
 // {
 //     _point.update(mouse);
 //     VisualElement::update(mouse);
-//     if (_isFocused || _point.isFocused())
+//     if (_isClicked || _point.isFocused())
 //     {
 //         auto& pointPos = _point.position();
 //         pointPos = mouse.position() - Vector2i{_point.width() / 2, 0};
@@ -43,3 +44,58 @@
 //     VisualElement::render();//rendering the line
 //     _point.render();
 // }
+
+engix::Slider::Slider(Direction orientation, std::shared_ptr<Texture> line, std::shared_ptr<Texture> point, Vector2i pointShift, int length)
+ : _orientation(orientation), VisualElement(std::move(line)), _point(std::move(point)), _pointShift(pointShift), _length(length)
+{
+    _point.relativePos(pointShift);
+}
+
+void engix::Slider::update(const Mouse &mouse)
+{
+    VisualElement::update(mouse);
+
+    if (_isClicked)
+    {
+        int start;
+        int end = _length;
+        
+        Vector2i pointPos = _point.position();
+
+        int mousePos;
+        if (_orientation == Direction::HORIZONTAL)
+        {
+            start = static_cast<int>(_position.x) + _pointShift.x;
+            end += start;
+
+            mousePos = static_cast<int>(mouse.position().x) - _point.width() / 2;
+            mousePos = std::clamp(mousePos, start, end);
+            pointPos.x = mousePos;
+        }
+        else
+        {
+            start = static_cast<int>(_position.y) + _pointShift.y;
+            end += start;
+
+            mousePos = static_cast<int>(mouse.position().y) - _point.height() / 2;
+            mousePos = std::clamp(mousePos, start, end);
+            pointPos.y = mousePos;
+        }
+        
+        _point.position(pointPos);
+        _value = static_cast<double>(mousePos - start) / _length;
+    }
+}
+
+void engix::Slider::render() const
+{
+    VisualElement::render();
+    _point.render();
+}
+
+void engix::Slider::updatePos()
+{
+    VisualElement::updatePos();
+
+    _point.srcRect({_position, _width, _height});
+}

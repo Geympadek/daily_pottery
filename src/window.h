@@ -14,22 +14,22 @@ namespace engix
     extern double pixelScale;
     extern double roundPixelScale;
 
-    constexpr size_t MIN_PIXEL_WIDTH = 192;
-    constexpr size_t MIN_PIXEL_HEIGHT = 108;
+    constexpr int MIN_PIXEL_WIDTH = 192;
+    constexpr int MIN_PIXEL_HEIGHT = 108;
 
     extern Rect gScreen;
 
     class Window
     {
     public:
-        Window(const char* title, size_t width, size_t height) {init(title, width, height);}
-        Window(std::string title, size_t width, size_t height) {init(std::move(title), width, height);}
+        Window(const char* title, int width, int height) {init(title, width, height);}
+        Window(std::string title, int width, int height) {init(std::move(title), width, height);}
         ~Window();
 
         void setTitle(const char* title) noexcept;
         void setTitle(const std::string& title) noexcept {setTitle(title.c_str());}
 
-        void setResolution(size_t width, size_t height) noexcept;
+        void setResolution(int width, int height) noexcept;
         
         void updatePixelScale() const noexcept;
         void update() noexcept;
@@ -37,11 +37,11 @@ namespace engix
 
         void fill(Color color) noexcept;
     private:
-        void init(std::string title, size_t width, size_t height);
+        void init(std::string title, int width, int height);
     private:
         SDL_Window* window;
-        size_t width;
-        size_t height;
+        int width;
+        int height;
         std::string title;
     };
 }

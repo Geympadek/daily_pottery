@@ -2,12 +2,12 @@
 
 using namespace engix;
 
-PixelImage::PixelImage(size_t width, size_t height) noexcept : width(width), height(height)
+PixelImage::PixelImage(int width, int height) noexcept : width(width), height(height)
 {
     resize(width, height);
 }
 
-PixelImage::PixelImage(Pixels pixels, size_t width, size_t height) noexcept : pixels(std::move(pixels)), width(width), height(height)
+PixelImage::PixelImage(Pixels pixels, int width, int height) noexcept : pixels(std::move(pixels)), width(width), height(height)
 {
 }
 
@@ -17,7 +17,7 @@ engix::PixelImage::PixelImage(const SmartSDLSurface& surface) noexcept
     auto numberOfPixels = width * height;
 
     auto data = static_cast<uint32_t*>(surface->pixels);
-    for (size_t i = 0; i < numberOfPixels; i++)
+    for (int i = 0; i < numberOfPixels; i++)
     {
         uint8_t red, green, blue, alpha;
         SDL_GetRGBA(data[i], surface->format, &red, &green, &blue, &alpha);
@@ -25,7 +25,7 @@ engix::PixelImage::PixelImage(const SmartSDLSurface& surface) noexcept
     }
 }
 
-void engix::PixelImage::resize(size_t width, size_t height) noexcept
+void engix::PixelImage::resize(int width, int height) noexcept
 {
     this->width = width; 
     this->height = height;
@@ -49,7 +49,7 @@ SmartSDLSurface engix::PixelImage::createSDLSurface() const
     
     auto dataPixels = static_cast<uint32_t*>(surface->pixels);
     auto numberOfPixels = pixels.size();
-    for (size_t i = 0; i < numberOfPixels; ++i) 
+    for (int i = 0; i < numberOfPixels; ++i) 
     {
         dataPixels[i] = SDL_MapRGBA(surface->format, pixels[i].red, pixels[i].green, pixels[i].blue, pixels[i].alpha);
     }
@@ -72,9 +72,9 @@ PixelImage &engix::PixelImage::getPart(PixelImage &dest, Rect clip) const noexce
 {
     dest.resize(clip.width, clip.height);
 
-    for (size_t i = 0, y = 0; y < clip.height; y++)
+    for (int i = 0, y = 0; y < clip.height; y++)
     {
-        for (size_t x = 0; x < clip.width; x++, i++)
+        for (int x = 0; x < clip.width; x++, i++)
         {
             dest.pixels[i] = get(clip.start.x + x, clip.start.y + y);
         }
@@ -82,12 +82,12 @@ PixelImage &engix::PixelImage::getPart(PixelImage &dest, Rect clip) const noexce
     return dest;
 }
 
-void PixelImage::draw(const PixelImage &src, Vector2s position) noexcept
+void PixelImage::draw(const PixelImage &src, Vector2i position) noexcept
 {
     const auto numberOfPixels = pixels.size();
-    for (size_t y = 0; y < src.height; y++)
+    for (int y = 0; y < src.height; y++)
     {
-        for (size_t x = 0; x < src.width; x++)
+        for (int x = 0; x < src.width; x++)
         {
             auto calcX = position.x + x;
             auto calcY = position.y + y;
@@ -105,9 +105,9 @@ void engix::PixelImage::draw(const PixelImage &src, Rect area) noexcept
     auto end = Vector2i{area.start.x + area.width, area.start.y + area.height};
     
     PixelImage buffer;
-    for (size_t y = area.start.y; y < end.y; y += src.height)
+    for (int y = area.start.y; y < end.y; y += src.height)
     {
-        for (size_t x = area.start.x; x < end.x; x += src.width)
+        for (int x = area.start.x; x < end.x; x += src.width)
         {
             Vector2s pos(x, y);
             auto delta = end - pos;

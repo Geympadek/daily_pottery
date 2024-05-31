@@ -1,7 +1,7 @@
 #include "window.h"
 
 SDL_Renderer* engix::gRenderer;
-void engix::Window::init(std::string title, size_t width, size_t height)
+void engix::Window::init(std::string title, int width, int height)
 {
     this->width = width;
     this->height = height;
@@ -12,7 +12,7 @@ void engix::Window::init(std::string title, size_t width, size_t height)
 
     int windowFlags = SDL_WINDOW_SHOWN;
     window = nullptr;
-    window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, static_cast<int>(width), static_cast<int>(height), windowFlags);
+    window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, windowFlags);
     if (window == nullptr)
     {
         std::string msg = "Unable to open window! SDL_Error: ";
@@ -46,13 +46,13 @@ void engix::Window::setTitle(const char *title) noexcept
     SDL_SetWindowTitle(window, title);
 }
 
-void engix::Window::setResolution(size_t width, size_t height) noexcept
+void engix::Window::setResolution(int width, int height) noexcept
 {
     this->width = width;
     this->height = height;
     updatePixelScale();
     updateScreen();
-    SDL_SetWindowSize(window, static_cast<int>(width), static_cast<int>(height));
+    SDL_SetWindowSize(window, width, height);
 }
 
 double engix::pixelScale;
@@ -74,8 +74,8 @@ void engix::Window::updateScreen() noexcept
 {
     //MIN_PIXEL_WIDTH / roundPixelScale = x / pixelScale;
     //x = MIN_PIXEL_WIDTH * pixelScale / roundPixelScale;
-    gScreen.width = static_cast<size_t>(std::round(MIN_PIXEL_WIDTH * pixelScale / roundPixelScale));
-    gScreen.height = static_cast<size_t>(std::round(MIN_PIXEL_HEIGHT * pixelScale / roundPixelScale));
+    gScreen.width = static_cast<int>(std::round(MIN_PIXEL_WIDTH * pixelScale / roundPixelScale));
+    gScreen.height = static_cast<int>(std::round(MIN_PIXEL_HEIGHT * pixelScale / roundPixelScale));
 }
 
 void engix::Window::fill(Color color) noexcept

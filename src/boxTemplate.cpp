@@ -37,7 +37,7 @@ BoxTemplate BoxTemplate::load(const assets::Path &path)
     return result;
 }
 
-Texture engix::BoxTemplate::genTexture(size_t width, size_t height) const
+Texture engix::BoxTemplate::genTexture(int width, int height) const
 {
     return Texture::load(width, height, left, up, right, down, leftUp, rightUp, leftDown, rightDown, fill);
 }

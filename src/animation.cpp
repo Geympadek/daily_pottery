@@ -28,11 +28,11 @@ void engix::Animation::loadDelays(const json::Value &json)
     const auto& jsonDelays = json["delays"].as<std::vector<long double>>();
     
     _duration = 0.0l;
-    _numberOfFrames = json.get("number_frames", jsonDelays.size()).as<size_t>();
+    _numberOfFrames = json.get("number_frames", jsonDelays.size()).as<int>();
     _delays.resize(_numberOfFrames, 0.0l);
-    for (size_t i = 0; i < _numberOfFrames; i++)
+    for (int i = 0; i < _numberOfFrames; i++)
     {
-        size_t index = i % jsonDelays.size();
+        int index = i % jsonDelays.size();
         _delays[i] = jsonDelays[index];
         _duration += _delays[i];
     }
@@ -57,7 +57,7 @@ void engix::Animation::render(long double millis, Vector2i position, double scal
     if (!_isLoaded)
         return;
 
-    size_t frame = 0;
+    int frame = 0;
     long double delay = 0;
     while (true)
     {

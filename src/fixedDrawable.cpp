@@ -1,8 +1,8 @@
 #include "fixedDrawable.h"
 
-engix::FixedDrawable::FixedDrawable(std::shared_ptr<Texture> texture, Vector2d position, Texture::Scaling scaling, Texture::Flip flip)
- : _texture(std::move(texture)), _position(position), _scaling(scaling), _flip(flip)
+engix::FixedDrawable::FixedDrawable(std::shared_ptr<Texture> texture) : _texture(std::move(texture))
 {
+
 }
 
 void engix::FixedDrawable::render() const

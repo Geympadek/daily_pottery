@@ -1,0 +1,39 @@
+{
+    "left": {
+        "start": [0, 2],
+        "width": 2,
+        "height": 1
+    },
+    "up": {
+        "start": [2, 0],
+        "width": 1,
+        "height": 2
+    },
+    "right": {
+        "start": [2, 2],
+        "width": 1,
+        "height": 1
+    },
+    "down": {
+        "start": [2, 3],
+        "width": 1,
+        "height": 2
+    },
+    "leftUp": {
+        "start": [0, 0]
+    },
+    "rightUp": {
+        "start": [2, 0]
+    },
+    "leftDown": {
+        "start": [0, 3]
+    },
+    "rightDown": {
+        "start": [2, 3]
+    },
+    "fill": {
+        "start": [2, 2],
+        "width": 1,
+        "height": 1
+    }
+}

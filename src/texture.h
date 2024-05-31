@@ -46,7 +46,7 @@ namespace engix
         static Texture load(const Texture& sheet, Rect clip);
         static Texture load(PixelImage image);
 
-        static Texture load(size_t width, size_t height, 
+        static Texture load(int width, int height, 
             const Texture& left, const Texture& up, const Texture& right, const Texture& down, 
             const Texture& luCorner, const Texture& ruCorner, const Texture& ldCorner, const Texture& rdCorner, 
             const Texture& fill)
@@ -56,7 +56,7 @@ namespace engix
                 luCorner._pixelImage, ruCorner._pixelImage, ldCorner._pixelImage, rdCorner._pixelImage,
                 fill._pixelImage);
         }
-        static Texture load(size_t width, size_t height, const Texture& sheet,
+        static Texture load(int width, int height, const Texture& sheet,
             Rect left, Rect up, Rect right, Rect down, 
             Rect luCorner, Rect ruCorner, Rect ldCorner, Rect rdCorner,
             Rect fill)
@@ -66,7 +66,7 @@ namespace engix
                 sheet.pixelImage(luCorner), sheet.pixelImage(ruCorner), sheet.pixelImage(ldCorner), sheet.pixelImage(rdCorner),
                 sheet.pixelImage(fill));
         }
-        static Texture load(size_t width, size_t height,
+        static Texture load(int width, int height,
             const PixelImage& left, const PixelImage& up, const PixelImage& right, const PixelImage& down,
             const PixelImage& luCorner, const PixelImage& ruCorner, const PixelImage& ldCorner, const PixelImage& rdCorner,
             const PixelImage& fill);
@@ -83,10 +83,10 @@ namespace engix
         const PixelImage& pixelImage() const noexcept {return _pixelImage;}
         PixelImage pixelImage(Rect clip) const noexcept {return _pixelImage.getPart(clip);}
         
-        size_t width() const noexcept {return _pixelImage.width; }
-        void width(size_t width) noexcept {_pixelImage.width = width;}
-        size_t height() const noexcept {return _pixelImage.height;}
-        void height(size_t height) noexcept {_pixelImage.height = height;}
+        int width() const noexcept {return _pixelImage.width; }
+        void width(int width) noexcept {_pixelImage.width = width;}
+        int height() const noexcept {return _pixelImage.height;}
+        void height(int height) noexcept {_pixelImage.height = height;}
     private:
         PixelImage _pixelImage;
         SmartSDLTexture sdlTexture = makeSmartTexture(nullptr);

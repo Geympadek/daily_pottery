@@ -81,7 +81,7 @@ Texture engix::Texture::load(PixelImage image)
     return texture;
 }
 
-Texture engix::Texture::load(size_t width, size_t height, 
+Texture engix::Texture::load(int width, int height, 
     const PixelImage &left, const PixelImage &up, const PixelImage &right, const PixelImage &down, 
     const PixelImage &luCorner, const PixelImage &ruCorner, const PixelImage &ldCorner, const PixelImage &rdCorner, 
     const PixelImage &fill)

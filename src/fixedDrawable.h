@@ -2,16 +2,16 @@
 
 #include "texture.h"
 
+using std::shared_ptr;
+
 namespace engix
 { 
-    extern double pixelScale;
-
     //Object that isn't affected by camera's position
     class FixedDrawable
     {
     public:
         FixedDrawable() {};
-        FixedDrawable(std::shared_ptr<Texture> texture, Vector2d position = {}, Texture::Scaling scaling = Texture::Scaling::NONE, Texture::Flip flip = Texture::Flip::NONE);
+        FixedDrawable(shared_ptr<Texture> texture);
         virtual ~FixedDrawable() {}
 
         virtual void render() const;
@@ -37,7 +37,7 @@ namespace engix
         Rotation _rotation;
 
         Texture::Flip _flip = Texture::Flip::NONE;
-        Texture::Scaling _scaling = Texture::Scaling::STRETCH;
-        std::shared_ptr<Texture> _texture = nullptr;
+        Texture::Scaling _scaling = Texture::Scaling::NONE;
+        shared_ptr<Texture> _texture = nullptr;
     };
 }

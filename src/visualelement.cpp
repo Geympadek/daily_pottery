@@ -1,86 +1,66 @@
 #include "visualelement.h"
 
-engix::VisualElement::VisualElement(std::shared_ptr<Texture> texture,
-    Vector2d relativePos, 
-    std::function<void(VisualElement *, const Mouse &)> onClick, 
-    std::function<void(VisualElement *, const Mouse &)> onHoverStart, 
-    std::function<void(VisualElement *, const Mouse &)> onHoverEnd, 
-    Rect srcRect, 
-    Align horizontalAlign, 
-    Align verticalAlign,
-    Texture::Scaling scaling,
-    Texture::Flip flip)
-: FixedDrawable(texture, {0, 0}, scaling, flip), _width(texture->width()), _height(texture->height()), _onClick(onClick), _onHoverStart(onHoverStart), _onHoverEnd(onHoverEnd), _srcRect(srcRect), _horizontalAlign(horizontalAlign), _verticalAlign(verticalAlign), _relativePos(relativePos)
+engix::VisualElement::VisualElement(std::shared_ptr<Texture> texture) : FixedDrawable(std::move(texture)), _width(_texture->width()), _height(_texture->height())
 {
-    updatePos();
 }
 
-engix::VisualElement::VisualElement(std::shared_ptr<Texture> texture, 
-    Vector2d relativePos, 
-    size_t width, 
-    size_t height, 
-    std::function<void(VisualElement *, const Mouse &)> onClick, 
-    std::function<void(VisualElement *, const Mouse &)> onHoverStart, 
-    std::function<void(VisualElement *, const Mouse &)> onHoverEnd, 
-    Rect srcRect, 
-    Align horizontalAlign,
-    Align verticalAlign,
-    Texture::Scaling scaling,
-    Texture::Flip flip)
-: FixedDrawable(std::move(texture), {0, 0}, scaling, flip), _width(width), _height(height), _onClick(onClick), _onHoverStart(onHoverStart), _onHoverEnd(onHoverEnd), _srcRect(srcRect), _horizontalAlign(horizontalAlign), _verticalAlign(verticalAlign), _relativePos(relativePos)
+engix::VisualElement::VisualElement(std::shared_ptr<Texture> texture, int width, int height) : FixedDrawable(std::move(texture)), _width(width), _height(height)
 {
-    updatePos();
 }
 
 void engix::VisualElement::update(const Mouse &mouse)
 {
+    if (_updatePos)
+    {
+        updatePos();
+        _updatePos = false;
+    }
+
     bool leftClick = mouse.state() & Mouse::State::LEFT;
-    if (Vector2i::isAbove(_position, _width, _height, mouse.position()))
+    if (rect().isAbove(mouse.position()))
     {
         if (!_isAbove)
         {
-            _onHoverStart(this, mouse);
+            if (_onHoverStart != nullptr)
+            {
+                _onHoverStart(this, mouse);
+            }
             _isAbove = true;
         }
-        if (!_isFocused)
+        if (!_isClicked && leftClick)
         {
-            _isFocused = leftClick && Vector2i::isAbove(_position, _width, _height, mouse.position());
-            _onClick(this, mouse);
+            _isClicked = true;
+            _isActive = true;
+            if (_onClick != nullptr)
+            {
+                _onClick(this, mouse);
+            }
         }
-    }
-    else
+    } else
     {
+        if (leftClick)
+        {
+            _isActive = false;
+        }
         if (_isAbove)
         {
-            _onHoverEnd(this, mouse);
+            if (_onHoverEnd != nullptr)
+            {
+                _onHoverEnd(this, mouse);
+            }
             _isAbove = false;
         }
     }
     if (!leftClick)
     {
-        _isFocused = false;
+        _isClicked = false;
     }
 }
 
 void engix::VisualElement::render() const
 {
-    Vector2d shift;
-
-    auto textureWidth = _texture->width();
-    auto textureHeight = _texture->height();
-
-    auto width = (_horizontalRepeat == Repeat::NONE ? std::min(_width, textureWidth) : _width);
-    auto height = (_verticalRepeat == Repeat::NONE ? std::min(_height, textureHeight) : _height);
-
-    for (size_t y = 0; y < height; y += textureHeight)
-    {
-        for (size_t x = 0; x < width; x += textureWidth)
-        {
-            Rect clip{{0, 0}, std::min(width - x, textureWidth), std::min(height - y, textureHeight)};
-
-            _texture->render(_position + Vector2d{x, y}, clip, _scale, _rotation, _position, _flip, _scaling);
-        }
-    }
+    FixedDrawable::render();
+    renderContent();
 }
 
 void engix::VisualElement::updatePos()
@@ -110,4 +90,22 @@ void engix::VisualElement::updatePos()
         break;
     }
     _position += _srcRect.start;
+
+    auto contentWrap = rect();
+    contentWrap.start += Vector2i(_paddingLeft, _paddingUp);
+    contentWrap.width -= _paddingRight + _paddingLeft;
+    contentWrap.height -= _paddingUp + _paddingDown;
+
+    for (auto it : _content)
+    {
+        it->srcRect(contentWrap);
+    }
+}
+
+void engix::VisualElement::renderContent() const
+{
+    for (auto it : _content)
+    {
+        it->render();
+    }
 }

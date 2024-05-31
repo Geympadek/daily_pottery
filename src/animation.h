@@ -27,19 +27,19 @@ namespace engix
         
         void render(long double millis, Vector2i position, double scale = 1.0, Rotation rotation = {}, Vector2i center = {}, Texture::Flip flip = Texture::Flip::NONE) const;
     public:
-        size_t width() const {return _width;}
-        size_t height() const {return _height;}
-        size_t numberOfFrames() const {return _numberOfFrames;}
+        int width() const {return _width;}
+        int height() const {return _height;}
+        int numberOfFrames() const {return _numberOfFrames;}
         long double duration() const {return _duration;}
     private:
         void loadDelays(const json::Value& json);
     private:
         Texture _sheet;
-        size_t _numberOfFrames = 0;
+        int _numberOfFrames = 0;
         std::vector<long double> _delays;
         long double _duration = 0;
 
-        size_t _width = 0;
-        size_t _height = 0;
+        int _width = 0;
+        int _height = 0;
     };
 }

@@ -32,24 +32,24 @@ namespace engix
     struct PixelImage
     {
         Pixels pixels;
-        size_t width = 0;
-        size_t height = 0;
+        int width = 0;
+        int height = 0;
 
         PixelImage() noexcept {}
-        PixelImage(size_t width, size_t height) noexcept;
-        PixelImage(Pixels pixels, size_t width, size_t height) noexcept;
+        PixelImage(int width, int height) noexcept;
+        PixelImage(Pixels pixels, int width, int height) noexcept;
         PixelImage(const SmartSDLSurface& surface) noexcept;
 
-        void resize(size_t width, size_t height) noexcept;
+        void resize(int width, int height) noexcept;
 
         SmartSDLSurface createSDLSurface() const;
 
-        Color& get(size_t x, size_t y) noexcept {return pixels[x + y * width];}
-        const Color& get(size_t x, size_t y) const noexcept {return pixels[x + y * width];}
+        Color& get(int x, int y) noexcept {return pixels[x + y * width];}
+        const Color& get(int x, int y) const noexcept {return pixels[x + y * width];}
 
         PixelImage getPart(Rect clip) const noexcept;
         PixelImage& getPart(PixelImage& dest, Rect clip) const noexcept;
-        void draw(const PixelImage& src, Vector2s position) noexcept;
+        void draw(const PixelImage& src, Vector2i position) noexcept;
         void draw(const PixelImage& src, Rect area) noexcept;
     };
 }

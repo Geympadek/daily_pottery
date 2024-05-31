@@ -9,6 +9,8 @@ namespace engix
     constexpr double DEG_TO_RADIANS = std::numbers::pi_v<float> / 180;
     constexpr double RADIANS_TO_DEG = 180 / std::numbers::pi_v<float>;
 
+    enum class Direction {HORIZONTAL, VERTICAL};
+    
     template <arithmetic T>
     class Vector2
     {
@@ -171,11 +173,13 @@ namespace engix
             }
             return vector / length;
         }
-        template <typename _T, typename __T>
-        constexpr static bool isAbove(Vector2 position, _T width, __T height, Vector2 point) noexcept
+        T& operator[](Direction direction)
         {
-            return position.x < point.x && position.x + static_cast<T>(width) > point.x &&
-                position.y < point.y && position.y + static_cast<T>(height) > point.y;
+            return direction == Direction::HORIZONTAL ? x : y;
+        }
+        T operator[](Direction direction) const
+        {
+            return direction == Direction::HORIZONTAL ? x : y;
         }
         friend std::ostream& operator<<(std::ostream &os, const Vector2 &dt) noexcept
         {

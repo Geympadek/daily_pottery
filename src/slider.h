@@ -1,24 +1,36 @@
 #pragma once
 
 #include "visualElement.h"
+#include "boxTemplate.h"
 
-// namespace engix
-// {
-//     //Just a slider implementation for interfaces.
-//     class Slider : public VisualElement
-//     {
-//     public:
-//         Slider();
-//         Slider(const Texture* line, Vector2d position, Vector2i padding, unsigned width, unsigned height, const Texture* point, Vector2i pointPadding, unsigned pointWidth, unsigned pointHeight);
-//         virtual void update(const Mouse& mouse) override;
-//         virtual void render() const override;
-//     public:
-//         double value() const {return _value;}
-//         void value(double value) {_value = value;}
+namespace engix
+{
+    class Slider : public VisualElement
+    {
+    public:
+        Slider() {}
+        Slider(Direction orientation, const BoxTemplate& line, int width, int height, std::shared_ptr<Texture> point, Vector2i pointShift)
+         : Slider(orientation, line, width, height, point, pointShift, (orientation == Direction::HORIZONTAL ? width - pointShift.x * 2 - point->width() : height - pointShift.y * 2 - point->height())) {}
 
-//         const VisualElement& point() const {return _point;}
-//     protected:
-//         VisualElement _point;
-//         double _value;
-//     };
-// }
+        Slider(Direction orientation, const BoxTemplate& line, int width, int height, std::shared_ptr<Texture> point, Vector2i pointShift, int moveableLength)
+         : Slider(orientation, std::make_shared<Texture>(line.genTexture(width, height)), point, pointShift, moveableLength) {}
+
+        Slider(Direction orientation, std::shared_ptr<Texture> line, std::shared_ptr<Texture> point, Vector2i pointShift, int length);
+        
+        virtual void update(const Mouse& mouse) override;
+        virtual void render() const override;
+    protected:
+        virtual void updatePos() override;
+    public:
+        double value() const {return _value;}
+        Direction orientation() const {return _orientation;}    
+    protected:
+        Direction _orientation;
+
+        VisualElement _point;
+        Vector2i _pointShift;
+
+        int _length;
+        double _value;
+    };
+}
