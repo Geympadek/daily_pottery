@@ -3,19 +3,24 @@
 using namespace engix;
 using namespace engix::encoding;
 
-static bool caseInsensCmp(const char* str1, const char* str2)
+static constexpr char toLower(char ch)
+{
+    return (ch >= 65 && ch <= 90) ? ch + 32 : ch;
+}
+
+static constexpr bool caseInsensCmp(const char* str1, const char* str2) noexcept
 {
     for (size_t i = 0; ; i++)
     {
-        if (tolower(str1[i]) != tolower(str2[i]))
+        if (toLower(str1[i]) != toLower(str2[i]))
             return false;
         if (str1[i] == '\0')
-            break;        
+            break;
     }
     return true;
 }
 
-Encoding engix::encoding::Format::encodingFromStr(const char *str)
+Encoding engix::encoding::Format::encodingFromStr(const char *str) noexcept
 {
     if (caseInsensCmp(str, "UTF-16LE"))
         return Encoding::UTF16LE;
@@ -28,7 +33,7 @@ Encoding engix::encoding::Format::encodingFromStr(const char *str)
     return Encoding::UTF8;
 }
 
-const char *engix::encoding::Format::strFromEncoding(Encoding encoding)
+const char *engix::encoding::Format::strFromEncoding(Encoding encoding) noexcept
 {
     switch (encoding)
     {

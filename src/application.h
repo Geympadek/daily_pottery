@@ -41,14 +41,6 @@ namespace engix
 
         void update();
         void render();
-        void handleInput();
-    private:
-        void handleKeyboard();
-        void handleMouseMovement();
-        void handleMouseDown(SDL_MouseButtonEvent e);
-        void handleMouseUp(SDL_MouseButtonEvent e);
-        void handleEvents();
-        void onKeyDown(const SDL_Event& event);
     public:
         // int indexFromScancode(SDL_Scancode scancode);
     private:

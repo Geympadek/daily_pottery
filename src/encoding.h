@@ -20,17 +20,17 @@ namespace engix
             Encoding from;
             Encoding to;
 
-            Format(Encoding from = UTF8, Encoding to = UTF8) : from(from), to(to) {}
-            Format(const char* from, const char* to) : from(encodingFromStr(from)), to(encodingFromStr(to)) {}
-            Format(const std::string& from, const std::string& to) : Format(from.c_str(), to.c_str()) {}
+            constexpr Format(Encoding from = UTF8, Encoding to = UTF8) noexcept : from(from), to(to) {}
+            Format(const char* from, const char* to) noexcept : from(encodingFromStr(from)), to(encodingFromStr(to)) {}
+            Format(const std::string& from, const std::string& to) noexcept : Format(from.c_str(), to.c_str()) {}
 
-            bool operator==(const Format& format) const noexcept {return from == format.from && to == format.to;}
+            constexpr bool operator==(const Format& format) const noexcept {return from == format.from && to == format.to;}
         
-            static Encoding encodingFromStr(const char* str);
-            static const char* strFromEncoding(Encoding encoding);
+            static Encoding encodingFromStr(const char* str) noexcept;
+            static const char* strFromEncoding(Encoding encoding) noexcept;
         };
 
-        inline size_t hashFormat(const Format& format)
+        inline constexpr size_t hashFormat(const Format& format)
         {
             return static_cast<size_t>(format.from) | (static_cast<size_t>(format.to) << 8);
         }

@@ -42,30 +42,36 @@ void engix::TextBox::updateSize()
     auto size = _font->findSize(_text);
     if (_horizontalSize == Size::AUTO)
     {
-        _width = _paddingLeft + _paddingRight + size.x;
-        if (_width < _minWidth)
+        auto width = _paddingLeft + _paddingRight + size.x;
+        if (width < _minWidth)
         {
-            _width = _minWidth;
-            _updateBackground = true;
+            width = _minWidth;
         }
-        else if (_width > _maxWidth)
+        else if (width > _maxWidth)
         {
-            _width = _maxWidth;
+            width = _maxWidth;
+        }
+        if (_width != width)
+        {
             _updateBackground = true;
+            _width = width;
         }
     }
     if (_verticalSize == Size::AUTO)
     {
-        _height = _paddingUp + _paddingDown + size.y;
-        if (_height < _minHeight)
+        auto height = _paddingUp + _paddingDown + size.y;
+        if (height < _minHeight)
         {
-            _height = _minHeight;
-            _updateBackground = true;
+            height = _minHeight;
         }
-        else if (_height > _maxHeight)
+        else if (height > _maxHeight)
         {
-            _height = _maxHeight;
+            height = _maxHeight;
+        }
+        if (_height != height)
+        {
             _updateBackground = true;
+            _height = height;
         }
     }
 }
