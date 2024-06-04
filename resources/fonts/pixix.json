@@ -1,12 +1,17 @@
 {
-    "format": 8,
+    "format": "UTF-16LE",
+    "start": [1, 1],
+    "list": "АаБбВвГгДдЕеЁёЖжЗзИиЙй\nКкЛлМмНнОоПпРрСсТтУуФф\nХхЦцЧчШшЩщЪъЫыЬьЭэЮюЯя\nAaBbCcDdEeFfGgHhIiJjKk\nLlMmNnOoPpQqRrSsTtUuVv\nWwXxYyZz0123456789~!@#\n$%^&*()-_=+{}[]|\\/><'\"\n;:,.? ",
     "cell_width": 7,
     "cell_height": 9,
+    "cell_shift": [1, 1],
     "height": 7,
+    "cursor_offset": [-1, 1],
+    "next_char_shift": 1,
     "chars":
     [
         {
-            "char": 32,
+            "char": " ",
             "width": 2
         }
     ]
