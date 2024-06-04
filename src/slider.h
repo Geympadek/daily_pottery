@@ -17,7 +17,7 @@ namespace engix
 
         Slider(Direction orientation, std::shared_ptr<Texture> line, std::shared_ptr<Texture> point, Vector2i pointShift, int length);
         
-        virtual void update(const Mouse& mouse) override;
+        virtual void update(Input& input) override;
         virtual void render() const override;
     protected:
         virtual void updatePos() override;

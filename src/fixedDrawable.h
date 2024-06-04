@@ -1,6 +1,7 @@
 #pragma once
 
 #include "texture.h"
+#include "input.h"
 
 using std::shared_ptr;
 
@@ -11,11 +12,15 @@ namespace engix
     {
     public:
         FixedDrawable() {};
-        FixedDrawable(shared_ptr<Texture> texture);
+        FixedDrawable(shared_ptr<Texture> texture) : _enable(true), _texture(std::move(texture)) {}
         virtual ~FixedDrawable() {}
 
-        virtual void render() const;
+        virtual void render() const {_texture->render(_position, _scale, _rotation, _position, _flip, _scaling);}
+        virtual void update(Input& input) {}
     public:
+        virtual bool enable() const {return _enable;}
+        virtual void enable(bool enable) {_enable = enable;}
+    
         virtual Vector2d position() const {return _position;}
         virtual void position(Vector2d position) {_position = position;}
 
@@ -31,6 +36,8 @@ namespace engix
         virtual Texture::Scaling scaling() const {return _scaling;}
         virtual void scaling(Texture::Scaling scaling) {_scaling = scaling;}
     protected:
+        bool _enable = false;
+    
         Vector2d _position;
         double _scale = 1.0;
 

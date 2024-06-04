@@ -16,6 +16,7 @@
 #include "textBox.h"
 #include "inputBox.h"
 #include "input.h"
+#include "encoding.h"
 
 using std::unordered_map;
 using std::string;
@@ -43,13 +44,17 @@ namespace engix
         void handleInput();
     private:
         void handleKeyboard();
+        void handleMouseMovement();
         void handleMouseDown(SDL_MouseButtonEvent e);
         void handleMouseUp(SDL_MouseButtonEvent e);
         void handleEvents();
+        void onKeyDown(const SDL_Event& event);
     public:
         // int indexFromScancode(SDL_Scancode scancode);
     private:
         bool isRunning = true;
+
+        Input input;
 
         Clock delta;
         Window window;

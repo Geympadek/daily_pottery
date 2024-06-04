@@ -43,12 +43,13 @@ namespace json
     public:
         enum class Type {NULL_VAL, BOOLEAN, NUMBER, OBJECT, ARRAY, STRING};
 
-        Value() : _value(""), _type(Type::NULL_VAL) {}
+        Value() : _type(Type::NULL_VAL) {}
 
         template <class T>
         Value(const T& value);
 
         Value(const Value& value);
+        Value(Value& value) : Value(static_cast<const Value&>(value)) {}
         Value(Value&& value);
 
         static Value loadFromFile(const assets::Path& path);
@@ -80,6 +81,7 @@ namespace json
         bool operator==(const Value& val) const;
     private://member functions
         void optimize();
+        static void refactor(std::string& str);
         void updateValues();
         void updateType();
 
@@ -222,6 +224,8 @@ namespace json
     template <>
     inline std::string Value::fromString<std::string>(const std::string& str)
     {
-        return str.size() > 0 ? str.substr(1, str.size() - 2) : "";
+        auto result = str.size() > 0 ? str.substr(1, str.size() - 2) : "";
+        refactor(result);
+        return result;
     }
 }

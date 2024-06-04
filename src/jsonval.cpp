@@ -30,7 +30,18 @@ static size_t findStrEnd(size_t strStart, const std::string& text)
     auto textSize = text.size();
     for (size_t i = strStart + 1; i < textSize; i++)
     {
-        if (text[i] == '\"' && text[i - 1] != '\\')
+        if (text[i] != '\"')
+            continue;
+
+        auto slashCount = 0;
+        for (size_t j = i - 1; j >= 0; j--)
+        {
+            if (text[j] == '\\')
+                slashCount++;
+            else
+                break;
+        }
+        if (slashCount ^ 1)//odd
             return i;
     }
     return textSize;
@@ -131,10 +142,55 @@ void json::Value::optimize()
 {
     for (size_t i = 0; i < _value.size(); i++)
     {
-        if (_value[i] == ' ' || _value[i] == '\n' || _value[i] == '\r' || _value[i] == '\t' || _value[i] == '\0')
+        auto curChar = _value[i];
+        if (curChar == ' ' || curChar == '\n' || curChar == '\r' || curChar == '\t' || curChar == '\0')
             _value.erase(i--, 1);
-        else if (_value[i] == '\"')
+        else if (curChar == '\"')
             i = findStrEnd(i, _value);
+    }
+}
+
+void json::Value::refactor(std::string &str)
+{
+    if (str.size() == 0)
+        return;
+    
+    char prevChar = '\0';
+    for (size_t i = 0; i < str.size(); i++)
+    {
+        if (prevChar == '\\')
+        {
+            str.erase(i - 1, 1);
+            auto& currentChar = str[i - 1];
+            switch (currentChar)
+            {
+            case 'n':
+                currentChar = '\n';
+                break;
+            case 't':
+                currentChar = '\t';
+                break;
+            case 'v':
+                currentChar = '\v';
+                break;
+            case 'b':
+                currentChar = '\b';
+                break;
+            case 'r':
+                currentChar = '\r';
+                break;
+            case '0':
+                currentChar = '\0';
+                break;
+            case 'f':
+                currentChar = '\f';
+                break;
+            case 'a':
+                currentChar = '\a';
+                break;
+            }
+        }
+        prevChar = str[i];
     }
 }
 

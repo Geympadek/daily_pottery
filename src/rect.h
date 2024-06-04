@@ -8,8 +8,8 @@ namespace engix
     struct Rect
     {
         Vector2i start;
-        int width;
-        int height;
+        int width = 0;
+        int height = 0;
 
         constexpr Rect(int x, int y, int width, int height) noexcept:
             start(x, y), width(width), height(height) {}

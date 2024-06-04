@@ -15,7 +15,7 @@ namespace engix
         TextBox(std::shared_ptr<BoxTemplate> background);
         TextBox(std::shared_ptr<BoxTemplate> background, int width, int height);
 
-        virtual void update(const Mouse& mouse) override;
+        virtual void update(Input& input) override;
         virtual void render() const override;
     public:
         virtual void width(int width) override 
@@ -51,12 +51,41 @@ namespace engix
             _updateSize = true;
         }
 
-        virtual Size verticalSize() const {return _verticalSize;}
-        virtual void verticalSize(Size verticalSize) 
+        virtual Size verticalSize() const noexcept {return _verticalSize;}
+        virtual void verticalSize(Size verticalSize) noexcept
         {
             _verticalSize = verticalSize;
             _updateSize = true;
         }
+        
+        virtual int minWidth() const noexcept {return _minWidth;}
+        virtual void minWidth(int minWidth) noexcept 
+        {
+            _minWidth = minWidth;
+            _updateSize = true;
+        }
+        
+        virtual int maxWidth() const noexcept {return _maxWidth;}
+        virtual void maxWidth(int maxWidth) noexcept 
+        {
+            _maxWidth = maxWidth;
+            _updateSize = true;
+        }
+        virtual int minHeight() const noexcept {return _minHeight;}
+        virtual void minHeight(int minHeight) noexcept 
+        {
+            _minHeight = minHeight;
+            _updateSize = true;
+        }
+        
+        virtual int maxHeight() const noexcept {return _maxHeight;}
+        virtual void maxHeight(int maxHeight) noexcept 
+        {
+            _maxHeight = maxHeight;
+            _updateSize = true;
+        }
+    protected:
+        void updateSize();
     protected:
         std::u16string _text;
         Color _textColor = Color::WHITE;
@@ -67,6 +96,11 @@ namespace engix
 
         Size _horizontalSize = Size::AUTO;
         Size _verticalSize = Size::AUTO;
+
+        int _minWidth = 0;
+        int _minHeight = 0;
+        int _maxWidth = std::numeric_limits<int>::max();
+        int _maxHeight = std::numeric_limits<int>::max();
 
         shared_ptr<BoxTemplate> _background;
     };

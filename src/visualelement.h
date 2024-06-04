@@ -15,7 +15,7 @@ namespace engix
         VisualElement(std::shared_ptr<Texture> texture);
         VisualElement(std::shared_ptr<Texture> texture, int width, int height);
         
-        virtual void update(const Mouse& mouse);
+        virtual void update(Input& input);
         virtual void render() const override;
     protected:
         virtual void updatePos();
@@ -30,9 +30,9 @@ namespace engix
 
         Rect rect() const {return Rect(_position, _width, _height);}
 
-        virtual void onClick(std::function<void(VisualElement*, const Mouse&)> onClick) {_onClick = onClick;}
-        virtual void onHoverStart(std::function<void(VisualElement*, const Mouse&)> onHoverStart) {_onHoverStart = onHoverStart;}
-        virtual void onHoverEnd(std::function<void(VisualElement*, const Mouse&)> onHoverEnd) {_onHoverEnd = onHoverEnd;}
+        virtual void onClick(std::function<void(VisualElement*, Input&)> onClick) {_onClick = onClick;}
+        virtual void onHoverStart(std::function<void(VisualElement*, Input&)> onHoverStart) {_onHoverStart = onHoverStart;}
+        virtual void onHoverEnd(std::function<void(VisualElement*, Input&)> onHoverEnd) {_onHoverEnd = onHoverEnd;}
 
         virtual int width() const {return _width;}
         virtual void width(int width) {_width = width;}
@@ -100,9 +100,9 @@ namespace engix
 
         Rect _srcRect = gScreen;
 
-        std::function<void(VisualElement*, const Mouse&)> _onClick;
-        std::function<void(VisualElement*, const Mouse&)> _onHoverStart;
-        std::function<void(VisualElement*, const Mouse&)> _onHoverEnd;
+        std::function<void(VisualElement*, Input&)> _onClick;
+        std::function<void(VisualElement*, Input&)> _onHoverStart;
+        std::function<void(VisualElement*, Input&)> _onHoverEnd;
 
         bool _updatePos = true;
 

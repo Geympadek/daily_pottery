@@ -51,9 +51,9 @@ engix::Slider::Slider(Direction orientation, std::shared_ptr<Texture> line, std:
     _point.relativePos(pointShift);
 }
 
-void engix::Slider::update(const Mouse &mouse)
+void engix::Slider::update(Input& input)
 {
-    VisualElement::update(mouse);
+    VisualElement::update(input);
 
     if (_isClicked)
     {
@@ -68,7 +68,7 @@ void engix::Slider::update(const Mouse &mouse)
             start = static_cast<int>(_position.x) + _pointShift.x;
             end += start;
 
-            mousePos = static_cast<int>(mouse.position().x) - _point.width() / 2;
+            mousePos = static_cast<int>(input.cursor.position.x) - _point.width() / 2;
             mousePos = std::clamp(mousePos, start, end);
             pointPos.x = mousePos;
         }
@@ -77,7 +77,7 @@ void engix::Slider::update(const Mouse &mouse)
             start = static_cast<int>(_position.y) + _pointShift.y;
             end += start;
 
-            mousePos = static_cast<int>(mouse.position().y) - _point.height() / 2;
+            mousePos = static_cast<int>(input.cursor.position.y) - _point.height() / 2;
             mousePos = std::clamp(mousePos, start, end);
             pointPos.y = mousePos;
         }

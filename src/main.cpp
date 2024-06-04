@@ -83,6 +83,7 @@ int main(int argc, char** argv)
     try
     {
         SDL_ShowCursor(SDL_DISABLE); 
+        SDL_StopTextInput();
         game = new Application();
         game->loop();
     }

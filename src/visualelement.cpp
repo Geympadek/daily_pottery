@@ -8,7 +8,7 @@ engix::VisualElement::VisualElement(std::shared_ptr<Texture> texture, int width,
 {
 }
 
-void engix::VisualElement::update(const Mouse &mouse)
+void engix::VisualElement::update(Input& input)
 {
     if (_updatePos)
     {
@@ -16,14 +16,14 @@ void engix::VisualElement::update(const Mouse &mouse)
         _updatePos = false;
     }
 
-    bool leftClick = mouse.state() & Mouse::State::LEFT;
-    if (rect().isAbove(mouse.position()))
+    bool leftClick = input.cursor.state & Input::Cursor::State::LEFT;
+    if (rect().isAbove(input.cursor.position))
     {
         if (!_isAbove)
         {
             if (_onHoverStart != nullptr)
             {
-                _onHoverStart(this, mouse);
+                _onHoverStart(this, input);
             }
             _isAbove = true;
         }
@@ -33,7 +33,7 @@ void engix::VisualElement::update(const Mouse &mouse)
             _isActive = true;
             if (_onClick != nullptr)
             {
-                _onClick(this, mouse);
+                _onClick(this, input);
             }
         }
     } else
@@ -46,7 +46,7 @@ void engix::VisualElement::update(const Mouse &mouse)
         {
             if (_onHoverEnd != nullptr)
             {
-                _onHoverEnd(this, mouse);
+                _onHoverEnd(this, input);
             }
             _isAbove = false;
         }
@@ -106,6 +106,7 @@ void engix::VisualElement::renderContent() const
 {
     for (auto it : _content)
     {
-        it->render();
+        if (it->enable())
+            it->render();
     }
 }
