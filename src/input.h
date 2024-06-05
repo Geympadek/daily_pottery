@@ -34,6 +34,7 @@ namespace engix
         void handleMouseUp(const SDL_MouseButtonEvent& e);
         void handleTextInput(const SDL_TextInputEvent& e);
         void onKeyDown(const SDL_KeyboardEvent& e);
+        void onKeyUp(const SDL_KeyboardEvent& e);
     public:
         u16string text;
         std::vector<size_t> selection;
@@ -41,5 +42,7 @@ namespace engix
         bool isReading = false;
         bool lastReading = false;
         bool isRunning = true;
+        bool shift = false;
+        bool ctrl = false;
     };
 }

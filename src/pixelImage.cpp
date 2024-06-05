@@ -123,3 +123,15 @@ void engix::PixelImage::draw(const PixelImage &src, Rect area) noexcept
         }
     }
 }
+
+void engix::PixelImage::fillWith(Color color, Rect area) noexcept
+{
+    auto end = area.start + Vector2i(area.width, area.height);
+    for (int y = area.start.y; y < end.y; y++)
+    {
+        for (int x = area.start.x; x < end.x; x++)
+        {
+            get(x, y) = color;
+        }
+    }
+}

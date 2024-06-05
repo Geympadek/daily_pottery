@@ -43,6 +43,10 @@ namespace engix
 
         virtual Color textColor() const {return _textColor;}
         virtual void textColor(Color color) {_textColor = color;}
+        virtual Color selectedTextColor() const {return _selectedTextColor;}
+        virtual void selectedTextColor(Color color) {_selectedTextColor = color;}
+        virtual Color selectionColor() const {return _selectionColor;}
+        virtual void selectionColor(Color color) {_selectionColor = color;}
 
         virtual Size horizontalSize() const {return _horizontalSize;}
         virtual void horizontalSize(Size horizontalSize) 
@@ -89,6 +93,9 @@ namespace engix
     protected:
         std::u16string _text;
         Color _textColor = Color::WHITE;
+        Color _selectedTextColor = Color::BLUE;
+        Color _selectionColor = Color::CYAN;
+
         std::shared_ptr<Font> _font;
 
         bool _updateSize = true;

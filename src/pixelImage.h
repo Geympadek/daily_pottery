@@ -51,5 +51,8 @@ namespace engix
         PixelImage& getPart(PixelImage& dest, Rect clip) const noexcept;
         void draw(const PixelImage& src, Vector2i position) noexcept;
         void draw(const PixelImage& src, Rect area) noexcept;
+
+        void fillWith(Color color) noexcept {fillWith(color, Rect(0, 0, width, height));}
+        void fillWith(Color color, Rect area) noexcept;
     };
 }

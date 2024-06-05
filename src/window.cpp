@@ -1,7 +1,7 @@
 #include "window.h"
 
 SDL_Renderer* engix::gRenderer;
-void engix::Window::init(std::string title, int width, int height)
+void engix::Window::init(const std::string& title, int width, int height)
 {
     this->width = width;
     this->height = height;

@@ -41,8 +41,6 @@ namespace engix
 
         void update();
         void render();
-    public:
-        // int indexFromScancode(SDL_Scancode scancode);
     private:
         bool isRunning = true;
 

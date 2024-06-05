@@ -23,7 +23,7 @@ namespace engix
     {
     public:
         Window(const char* title, int width, int height) {init(title, width, height);}
-        Window(std::string title, int width, int height) {init(std::move(title), width, height);}
+        Window(const std::string& title, int width, int height) {init(title, width, height);}
         ~Window();
 
         void setTitle(const char* title) noexcept;
@@ -37,7 +37,7 @@ namespace engix
 
         void fill(Color color) noexcept;
     private:
-        void init(std::string title, int width, int height);
+        void init(const std::string& title, int width, int height);
     private:
         SDL_Window* window;
         int width;

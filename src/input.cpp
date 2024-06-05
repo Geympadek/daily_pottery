@@ -43,6 +43,9 @@ void engix::Input::handleEvents()
         case SDL_KEYDOWN:
             onKeyDown(e.key);
             break;
+        case SDL_KEYUP:
+            onKeyUp(e.key);
+            break;
         case SDL_TEXTINPUT:
             handleTextInput(e.text);
             break;
@@ -115,6 +118,7 @@ void engix::Input::onKeyDown(const SDL_KeyboardEvent &e)
 {
     if (isReading)
     {
+        int movement = 0;
         switch (e.keysym.scancode)
         {
         case SDL_SCANCODE_BACKSPACE:
@@ -128,14 +132,35 @@ void engix::Input::onKeyDown(const SDL_KeyboardEvent &e)
             if (textCursor == 0)
                 break;
             
-            textCursor--;
+            movement = ctrl ? textCursor : 1;
+            textCursor -= movement;
             break;
         case SDL_SCANCODE_RIGHT:
             if (textCursor == text.size())
                 break;
             
-            textCursor++;
+            movement = ctrl ? static_cast<int>(text.size()) - textCursor : 1;
+            textCursor += movement;
+            break;
+        case SDL_SCANCODE_LSHIFT:
+            shift = true;
+            break;
+        case SDL_SCANCODE_LCTRL:
+            ctrl = true;
             break;
         }
+    }
+}
+
+void engix::Input::onKeyUp(const SDL_KeyboardEvent &e)
+{
+    switch (e.keysym.scancode)
+    {
+    case SDL_SCANCODE_LSHIFT:
+        shift = false;
+        break;
+    case SDL_SCANCODE_LCTRL:
+        ctrl = false;
+        break;
     }
 }
