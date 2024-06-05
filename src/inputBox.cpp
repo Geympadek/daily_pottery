@@ -33,6 +33,12 @@ void engix::InputBox::update(Input &input)
         {
             text(input.text);
         }
+
+        if (input.cursor.state & Input::Cursor::LEFT)
+        {
+            auto relCursorPos = input.cursor.position - _position - Vector2i(_paddingLeft, _paddingUp);
+            input.textCursor = static_cast<int>(_font->findClosest(_text, relCursorPos));
+        }
         _cursorPosition = Vector2i(_font->findSize(input.text.substr(0, input.textCursor)).x, 0) + _font->cursorOffset();
     }
     _showCursor = _isActive && (static_cast<int>(_cursorClock.millis()) % 1000 < 500);

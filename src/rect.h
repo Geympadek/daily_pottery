@@ -22,8 +22,8 @@ namespace engix
 
         constexpr bool isAbove(Vector2i point)
         {
-            return start.x < point.x && start.x + static_cast<int>(width) > point.x &&
-                start.y < point.y && start.y + static_cast<int>(height) > point.y;
+            return start.x <= point.x && start.x + static_cast<int>(width) >= point.x &&
+                start.y <= point.y && start.y + static_cast<int>(height) >= point.y;
         }
         
         constexpr operator SDL_Rect() const noexcept {return {start.x, start.y, static_cast<int>(width), static_cast<int>(height)};}
