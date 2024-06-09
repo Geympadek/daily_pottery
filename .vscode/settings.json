@@ -57,6 +57,7 @@
         "thread": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp",
-        "xmemory": "cpp"
+        "xmemory": "cpp",
+        "set": "cpp"
     }
 }

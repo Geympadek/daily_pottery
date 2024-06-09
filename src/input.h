@@ -5,6 +5,7 @@
 
 #include <string>
 #include <vector>
+#include <set>
 
 #include "vector2.h"
 
@@ -35,9 +36,11 @@ namespace engix
         void handleTextInput(const SDL_TextInputEvent& e);
         void onKeyDown(const SDL_KeyboardEvent& e);
         void onKeyUp(const SDL_KeyboardEvent& e);
+        void onLeftDown(const SDL_KeyboardEvent& e);
+        void onRightDown(const SDL_KeyboardEvent& e);
     public:
         u16string text;
-        std::vector<size_t> selection;
+        std::set<size_t> selection;
         int textCursor = 0;
         bool isReading = false;
         bool lastReading = false;

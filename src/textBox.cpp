@@ -24,12 +24,32 @@ void engix::TextBox::update(Input& input)
         _updateBackground = false;
         _updatePos = true;
     }
+    if (input.selection != _selection)
+    {
+        _selection = input.selection;
+
+        PixelImage selectedArea(_width, _height);
+        
+        _font->map(_text, [this, &selectedArea](Vector2i cursor, char16_t c, size_t i, const Font::CharInfo& cInfo){
+            if (!_selection.contains(i))
+            {
+                return;
+            }
+
+            Rect clip(Vector2i(_paddingLeft, _paddingUp) + cursor + _font->selectionOffset(), cInfo.width + _font->selectedLeft() + _font->selectedRight(), _font->selectedHeight());
+            selectedArea.fillWith(_selectionColor, clip);
+        });
+        _selectedArea = Texture::load(selectedArea);
+    }
+
     VisualElement::update(input);
 }
 
 void engix::TextBox::render() const
 {
     VisualElement::render();
+
+    _selectedArea.render(_position, _scale, _rotation, _position, _flip, _scaling);
 
     if (_font != nullptr)
     {

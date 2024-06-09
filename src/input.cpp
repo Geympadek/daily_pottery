@@ -19,6 +19,12 @@ void Input::update()
     handleEvents();
     handleKeyboard();
     handleMouseMovement();
+
+    for (const auto& el : selection)
+    {
+        std::cout << el << ' ';
+    }
+    std::cout << '\n';
 }
 
 void engix::Input::handleEvents()
@@ -101,7 +107,7 @@ void engix::Input::handleMouseUp(const SDL_MouseButtonEvent& e)
 
 void engix::Input::handleTextInput(const SDL_TextInputEvent &e)
 {
-    constexpr encoding::Format format(encoding::UTF8,
+    constexpr encoding::Format FORMAT(encoding::UTF8,
     #if SDL_BYTEORDER == SDL_BIG_ENDIAN
     encoding::UTF16BE
     #else
@@ -109,7 +115,7 @@ void engix::Input::handleTextInput(const SDL_TextInputEvent &e)
     #endif
     );
 
-    auto insertedText = encoding::convert<char, char16_t>(std::string(e.text), format);
+    auto insertedText = encoding::convert<char, char16_t>(std::string(e.text), FORMAT);
     text.insert(textCursor, insertedText);
     textCursor += static_cast<int>(insertedText.size());
 }
@@ -118,35 +124,29 @@ void engix::Input::onKeyDown(const SDL_KeyboardEvent &e)
 {
     if (isReading)
     {
-        int movement = 0;
         switch (e.keysym.scancode)
         {
-        case SDL_SCANCODE_BACKSPACE:
-            if (text.size() == 0)
-                break;
-            
-            text.erase(textCursor - 1, 1);
-            textCursor--;
+            case SDL_SCANCODE_BACKSPACE:
+            {
+                if (text.size() == 0)
+                    break;
+                
+                auto index = textCursor - 1;
+                text.erase(index, 1);
+                textCursor--;
+            }
             break;
-        case SDL_SCANCODE_LEFT:
-            if (textCursor == 0)
-                break;
-            
-            movement = ctrl ? textCursor : 1;
-            textCursor -= movement;
+            case SDL_SCANCODE_LEFT:
+                onLeftDown(e);
             break;
-        case SDL_SCANCODE_RIGHT:
-            if (textCursor == text.size())
-                break;
-            
-            movement = ctrl ? static_cast<int>(text.size()) - textCursor : 1;
-            textCursor += movement;
+            case SDL_SCANCODE_RIGHT:
+                onRightDown(e);
             break;
-        case SDL_SCANCODE_LSHIFT:
-            shift = true;
+            case SDL_SCANCODE_LSHIFT:
+                shift = true;
             break;
-        case SDL_SCANCODE_LCTRL:
-            ctrl = true;
+            case SDL_SCANCODE_LCTRL:
+                ctrl = true;
             break;
         }
     }
@@ -163,4 +163,53 @@ void engix::Input::onKeyUp(const SDL_KeyboardEvent &e)
         ctrl = false;
         break;
     }
+}
+
+void engix::Input::onLeftDown(const SDL_KeyboardEvent &e)
+{
+    if (textCursor == 0)
+        return;
+
+    int movement = ctrl ? textCursor : 1;
+    if (shift)
+    {
+        for (int i = 1; i <= movement; i++)
+        {
+            auto index = textCursor - i;
+            if (selection.contains(index))
+                selection.erase(index);
+            else
+                selection.insert(index);
+        }
+    } else if (selection.size() > 0)
+    {
+        selection.clear();
+        return;
+    }
+    textCursor -= movement;
+}
+
+void engix::Input::onRightDown(const SDL_KeyboardEvent &e)
+{
+    if (textCursor == text.size())
+        return;
+
+    int movement = ctrl ? static_cast<int>(text.size()) - textCursor : 1;
+
+    if (shift)
+    {
+        for (int i = 0; i < movement; i++)
+        {
+            auto index = textCursor + i;
+            if (selection.contains(index))
+                selection.erase(index);
+            else
+                selection.insert(index);
+        }
+    } else if (selection.size() > 0)
+    {
+        selection.clear();
+        return;
+    }
+    textCursor += movement;
 }
