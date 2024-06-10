@@ -28,6 +28,8 @@ namespace engix
 
         constexpr uint32_t hex() const noexcept {return (red << 24) | (green << 16) | (blue << 8) | alpha;}
 
+        constexpr bool operator==(const Color& color) const noexcept {return red == color.red && green == color.green && blue == color.blue && alpha == color.alpha;}
+        constexpr bool operator!=(const Color& color) const noexcept {return !operator==(color);}
         constexpr operator SDL_Color() const noexcept {return {red, green, blue, alpha};};
         
         static const Color WHITE;
