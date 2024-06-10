@@ -148,6 +148,15 @@ void engix::Input::onKeyDown(const SDL_KeyboardEvent &e)
             case SDL_SCANCODE_LCTRL:
                 ctrl = true;
             break;
+            case SDL_SCANCODE_A:
+                if (ctrl)
+                {
+                    for (size_t i = 0; i < text.size(); i++)
+                    {
+                        selection.insert(i);
+                    }
+                }
+            break;
         }
     }
 }

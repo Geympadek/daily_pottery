@@ -53,7 +53,7 @@ void engix::TextBox::render() const
 
     if (_font != nullptr)
     {
-        _font->render(_text, _position + Vector2i(_paddingLeft, _paddingUp), _textColor);
+        _font->render(_text, _position + Vector2i(_paddingLeft, _paddingUp), _textColor, _selection, _selectedTextColor);
     }
 }
 
