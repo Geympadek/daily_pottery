@@ -10,8 +10,8 @@
         "height": 2
     },
     "right": {
-        "start": [2, 2],
-        "width": 1,
+        "start": [3, 2],
+        "width": 2,
         "height": 1
     },
     "down": {
@@ -23,13 +23,13 @@
         "start": [0, 0]
     },
     "rightUp": {
-        "start": [2, 0]
+        "start": [3, 0]
     },
     "leftDown": {
         "start": [0, 3]
     },
     "rightDown": {
-        "start": [2, 3]
+        "start": [3, 3]
     },
     "fill": {
         "start": [2, 2],

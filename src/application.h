@@ -32,6 +32,19 @@ namespace engix
     class Application
     {
     public:
+        enum Page : uint8_t {
+            LOGO,
+            SEARCH,
+            ADD,
+            TEMPER,
+            MAIN_INFO,
+            THICKNESS,
+            DRYING,
+            FIREING,
+            SUCCESS,
+            NUMBER_OF_PAGES
+        };
+
         Application();
         ~Application();
 
@@ -52,19 +65,6 @@ namespace engix
         Mouse mouse;
 
         Timer logoTimer;
-
-        enum Page : uint8_t {
-            LOGO,
-            SEARCH,
-            ADD,
-            TEMPER,
-            MAIN_INFO,
-            THICKNESS,
-            DRYING,
-            FIREING,
-            SUCCESS,
-            NUMBER_OF_PAGES
-        };
 
         Page currentPage;
 

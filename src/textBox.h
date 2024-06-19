@@ -41,6 +41,11 @@ namespace engix
             _updateSize = true;
         }
 
+        virtual const Align horizontalTextAlign() const {return _horizontalTextAlign;}
+        virtual void horizontalTextAlign(Align align) {_horizontalTextAlign = align;}
+        virtual const Align verticalTextAlign() const {return _verticalTextAlign;}
+        virtual void verticalTextAlign(Align align) {_verticalTextAlign = align;}
+
         virtual Color textColor() const {return _textColor;}
         virtual void textColor(Color color) {_textColor = color;}
         virtual Color selectedTextColor() const {return _selectedTextColor;}
@@ -92,6 +97,12 @@ namespace engix
         void updateSize();
     protected:
         std::u16string _text;
+
+        Vector2i _textPosition;
+        
+        Align _horizontalTextAlign = Align::START;
+        Align _verticalTextAlign = Align::START;
+
         Color _textColor = Color::WHITE;
         Color _selectedTextColor = Color::BLUE;
         Color _selectionColor = Color::CYAN;

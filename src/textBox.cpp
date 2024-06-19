@@ -34,7 +34,7 @@ void engix::TextBox::render() const
 
     if (_font != nullptr)
     {
-        _font->render(_text, _position + Vector2i(_paddingLeft, _paddingUp), _textColor);
+        _font->render(_text, _position + _textPosition + Vector2i(_paddingLeft, _paddingUp), _textColor);
     }
 }
 
@@ -74,5 +74,32 @@ void engix::TextBox::updateSize()
             _updateBackground = true;
             _height = height;
         }
+    }
+    
+    auto pureWidth = _width - _paddingLeft - _paddingRight;
+    auto pureHeight = _height - _paddingUp - _paddingDown;
+    switch (_horizontalTextAlign)
+    {
+    case Align::START:
+        _textPosition.x = 0;
+        break;
+    case Align::CENTER:
+        _textPosition.x = (pureWidth - size.x) / 2;
+        break;
+    case Align::END:
+        _textPosition.x = pureWidth - size.x;
+        break;
+    }
+    switch (_verticalTextAlign)
+    {
+    case Align::START:
+        _textPosition.y = 0;
+        break;
+    case Align::CENTER:
+        _textPosition.y = (pureHeight - size.y) / 2;
+        break;
+    case Align::END:
+        _textPosition.y = pureHeight - size.y;
+        break;
     }
 }
