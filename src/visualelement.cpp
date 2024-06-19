@@ -10,6 +10,8 @@ engix::VisualElement::VisualElement(std::shared_ptr<Texture> texture, int width,
 
 void engix::VisualElement::update(Input& input)
 {
+    FixedDrawable::update(input);
+
     if (_updatePos)
     {
         updatePos();

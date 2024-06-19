@@ -44,7 +44,8 @@ namespace engix
     private:
         bool isRunning = true;
 
-        Input input;
+        Input currentInput;
+        Input prevInput;
 
         Clock delta;
         Window window;

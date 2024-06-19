@@ -2,12 +2,10 @@
 
 engix::InputBox::InputBox(shared_ptr<BoxTemplate> background, shared_ptr<Texture> textCursor) : TextBox(background), _textCursor(std::move(textCursor))
 {
-    _cursorClock.start();
 }
 
 engix::InputBox::InputBox(shared_ptr<BoxTemplate> background, int width, int height, shared_ptr<Texture> textCursor) : TextBox(background, width, height), _textCursor(std::move(textCursor))
 {
-    _cursorClock.start();
 }
 
 void engix::InputBox::render() const
@@ -30,16 +28,14 @@ void engix::InputBox::update(Input &input)
     {
         input.isReading = true;
         if (_text != input.text)
-        {
             text(input.text);
-        }
 
         if (input.cursor.state & Input::Cursor::LEFT)
         {
             auto relCursorPos = input.cursor.position - _position - Vector2i(_paddingLeft, _paddingUp);
             input.textCursor = static_cast<int>(_font->findClosest(_text, relCursorPos));
         }
-        _cursorPosition = Vector2i(_font->findSize(input.text.substr(0, input.textCursor)).x, 0) + _font->cursorOffset();
+        _cursorPosition = Vector2i(_font->findSize({_text.begin(), _text.begin() + input.textCursor}).x, 0) + _font->cursorOffset();
     }
-    _showCursor = _isActive && (static_cast<int>(_cursorClock.millis()) % 1000 < 500);
+    _showCursor = _isActive && input.blinkTextCursor;
 }

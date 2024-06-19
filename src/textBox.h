@@ -110,8 +110,5 @@ namespace engix
         int _maxHeight = std::numeric_limits<int>::max();
 
         shared_ptr<BoxTemplate> _background;
-        
-        Texture _selectedArea;
-        std::set<size_t> _selection;
     };
 }

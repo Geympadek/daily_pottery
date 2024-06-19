@@ -17,7 +17,7 @@ namespace engix
     protected:
         shared_ptr<Texture> _textCursor;
         bool _showCursor;
+
         Vector2i _cursorPosition;
-        Clock _cursorClock;
     };
 }

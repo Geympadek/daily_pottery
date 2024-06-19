@@ -7,6 +7,7 @@
 #include <vector>
 #include <set>
 
+#include "clock.h"
 #include "vector2.h"
 
 using std::u16string;
@@ -25,6 +26,7 @@ namespace engix
             bool isShown = true;
         } cursor;
 
+        Input(Input* prevInput = nullptr) : prevInput(prevInput) {}
         void update();
     private:
         void handleEvents();
@@ -39,11 +41,12 @@ namespace engix
         void onLeftDown(const SDL_KeyboardEvent& e);
         void onRightDown(const SDL_KeyboardEvent& e);
     public:
+        Input* prevInput = nullptr;
+
         u16string text;
-        std::set<size_t> selection;
         int textCursor = 0;
+        bool blinkTextCursor = false;
         bool isReading = false;
-        bool lastReading = false;
         bool isRunning = true;
         bool shift = false;
         bool ctrl = false;

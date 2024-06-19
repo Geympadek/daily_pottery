@@ -4,27 +4,29 @@
 
 using namespace engix;
 
+static Clock cursorClock;
 void Input::update()
 {
-    if (!lastReading && isReading)
+    assert(prevInput != nullptr);
+    if (!prevInput->isReading && isReading)
     {
         SDL_StartTextInput();
     }
-    else if (lastReading && !isReading)
+    else if (prevInput->isReading && !isReading)
     {
         SDL_StopTextInput();
     }
-    lastReading = isReading;
+    
+    *prevInput = *this;
+
+    if (cursor.state & Cursor::LEFT || !cursorClock.isRunning())
+        cursorClock.restart();
 
     handleEvents();
     handleKeyboard();
     handleMouseMovement();
 
-    for (const auto& el : selection)
-    {
-        std::cout << el << ' ';
-    }
-    std::cout << '\n';
+    blinkTextCursor = static_cast<int>(cursorClock.millis()) % 1000 < 500;
 }
 
 void engix::Input::handleEvents()
@@ -124,6 +126,7 @@ void engix::Input::onKeyDown(const SDL_KeyboardEvent &e)
 {
     if (isReading)
     {
+        cursorClock.restart();   
         switch (e.keysym.scancode)
         {
             case SDL_SCANCODE_BACKSPACE:
@@ -148,15 +151,6 @@ void engix::Input::onKeyDown(const SDL_KeyboardEvent &e)
             case SDL_SCANCODE_LCTRL:
                 ctrl = true;
             break;
-            case SDL_SCANCODE_A:
-                if (ctrl)
-                {
-                    for (size_t i = 0; i < text.size(); i++)
-                    {
-                        selection.insert(i);
-                    }
-                }
-            break;
         }
     }
 }
@@ -180,21 +174,6 @@ void engix::Input::onLeftDown(const SDL_KeyboardEvent &e)
         return;
 
     int movement = ctrl ? textCursor : 1;
-    if (shift)
-    {
-        for (int i = 1; i <= movement; i++)
-        {
-            auto index = textCursor - i;
-            if (selection.contains(index))
-                selection.erase(index);
-            else
-                selection.insert(index);
-        }
-    } else if (selection.size() > 0)
-    {
-        selection.clear();
-        return;
-    }
     textCursor -= movement;
 }
 
@@ -204,21 +183,5 @@ void engix::Input::onRightDown(const SDL_KeyboardEvent &e)
         return;
 
     int movement = ctrl ? static_cast<int>(text.size()) - textCursor : 1;
-
-    if (shift)
-    {
-        for (int i = 0; i < movement; i++)
-        {
-            auto index = textCursor + i;
-            if (selection.contains(index))
-                selection.erase(index);
-            else
-                selection.insert(index);
-        }
-    } else if (selection.size() > 0)
-    {
-        selection.clear();
-        return;
-    }
     textCursor += movement;
 }

@@ -2,6 +2,7 @@
 
 #include "vector2.h"
 #include <SDL.h>
+#include "math.h"
 
 namespace engix
 {
@@ -11,16 +12,17 @@ namespace engix
         int width = 0;
         int height = 0;
 
+        constexpr Rect() noexcept {}
         constexpr Rect(int x, int y, int width, int height) noexcept:
             start(x, y), width(width), height(height) {}
         constexpr Rect(Vector2i start, int width, int height) noexcept :
             start(start), width(width), height(height) {}
         constexpr Rect(int width, int height) noexcept :
             start(), width(width), height(height) {}
-        constexpr Rect() noexcept :
-            start(), width(0), height(0) {}
+        constexpr Rect(Vector2i a, Vector2i b) noexcept :
+            start(std::min(a.x, b.x), std::min(a.y, b.y)), width(abs(a.x - b.x)), height(abs(a.y - b.y)) {}
 
-        constexpr bool isAbove(Vector2i point)
+        constexpr bool isAbove(Vector2i point) const noexcept
         {
             return start.x <= point.x && start.x + static_cast<int>(width) >= point.x &&
                 start.y <= point.y && start.y + static_cast<int>(height) >= point.y;

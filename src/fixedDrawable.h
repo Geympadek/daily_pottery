@@ -7,7 +7,6 @@ using std::shared_ptr;
 
 namespace engix
 { 
-    //Object that isn't affected by camera's position
     class FixedDrawable
     {
     public:
@@ -16,7 +15,9 @@ namespace engix
         virtual ~FixedDrawable() {}
 
         virtual void render() const {_texture->render(_position, _scale, _rotation, _position, _flip, _scaling);}
-        virtual void update(Input& input) {}
+        virtual void update(Input& input)
+        {
+        }
     public:
         virtual bool enable() const {return _enable;}
         virtual void enable(bool enable) {_enable = enable;}
